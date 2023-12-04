@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ProjectileController : MonoBehaviour
 {
+    public float timeToLive = 0.1f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +25,6 @@ public class ProjectileController : MonoBehaviour
             Debug.Log("Player hit !");
         }
             
-        Destroy(this.gameObject, 0.1f);
+        Destroy(this.gameObject, timeToLive);
     }
 }

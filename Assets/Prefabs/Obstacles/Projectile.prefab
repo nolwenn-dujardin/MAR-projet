@@ -10,7 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1808265353395088, guid: 296b6c6ad62626c48aef7fa6c5e2a9a8, type: 3}
       propertyPath: m_Name
-      value: Balle Variant
+      value: Projectile
+      objectReference: {fileID: 0}
+    - target: {fileID: 1808265353395088, guid: 296b6c6ad62626c48aef7fa6c5e2a9a8, type: 3}
+      propertyPath: m_TagString
+      value: Projectile
       objectReference: {fileID: 0}
     - target: {fileID: 4813550475596240, guid: 296b6c6ad62626c48aef7fa6c5e2a9a8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -80,6 +84,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee972860da6b22744b05a82016f1afba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeToLive: 3
 --- !u!54 &8982125497286638443
 Rigidbody:
   m_ObjectHideFlags: 0

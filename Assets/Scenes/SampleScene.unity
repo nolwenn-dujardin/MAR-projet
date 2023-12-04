@@ -313,7 +313,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 504e39813d53f0844bc8118cef87b743, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -489,6 +489,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1006040752 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7320947011287787316, guid: dd76d8a61e514d0409976c98d4a75cdc, type: 3}
+  m_PrefabInstance: {fileID: 1809569504}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1771683454
 GameObject:
   m_ObjectHideFlags: 0
@@ -502,7 +507,7 @@ GameObject:
   - component: {fileID: 1771683457}
   - component: {fileID: 1771683456}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -518,7 +523,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 10, y: 1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 336161702}
@@ -565,7 +570,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c6117b2da18b15f4ab62e19419b41e89, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -604,20 +609,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2686027908303705012, guid: dd76d8a61e514d0409976c98d4a75cdc, type: 3}
-      propertyPath: Bullet
+      propertyPath: target
       value: 
-      objectReference: {fileID: 2931883353860275426, guid: 340c8618d8263244787ad5a22daca5be, type: 3}
+      objectReference: {fileID: 848259004}
+    - target: {fileID: 2686027908303705012, guid: dd76d8a61e514d0409976c98d4a75cdc, type: 3}
+      propertyPath: firePosition
+      value: 
+      objectReference: {fileID: 1006040752}
     - target: {fileID: 5214928719362573492, guid: dd76d8a61e514d0409976c98d4a75cdc, type: 3}
       propertyPath: m_Name
       value: Canon
       objectReference: {fileID: 0}
     - target: {fileID: 8432584907016050859, guid: dd76d8a61e514d0409976c98d4a75cdc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 3.24
       objectReference: {fileID: 0}
     - target: {fileID: 8432584907016050859, guid: dd76d8a61e514d0409976c98d4a75cdc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 2.29
       objectReference: {fileID: 0}
     - target: {fileID: 8432584907016050859, guid: dd76d8a61e514d0409976c98d4a75cdc, type: 3}
       propertyPath: m_LocalPosition.z
@@ -625,19 +634,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8432584907016050859, guid: dd76d8a61e514d0409976c98d4a75cdc, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.4922403
       objectReference: {fileID: 0}
     - target: {fileID: 8432584907016050859, guid: dd76d8a61e514d0409976c98d4a75cdc, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8432584907016050859, guid: dd76d8a61e514d0409976c98d4a75cdc, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.8704594
       objectReference: {fileID: 0}
     - target: {fileID: 8432584907016050859, guid: dd76d8a61e514d0409976c98d4a75cdc, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8432584907016050859, guid: dd76d8a61e514d0409976c98d4a75cdc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -645,7 +654,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8432584907016050859, guid: dd76d8a61e514d0409976c98d4a75cdc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -121.024
       objectReference: {fileID: 0}
     - target: {fileID: 8432584907016050859, guid: dd76d8a61e514d0409976c98d4a75cdc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

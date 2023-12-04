@@ -7,6 +7,9 @@ public class CanonController : MonoBehaviour
    public float ReloadTime;
     public GameObject Bullet;
     public float ShootSpeed;
+    public Transform firePosition;
+
+    public Transform target;
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +20,10 @@ public class CanonController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //Target a specific object
+        if(target != null){
+            transform.parent.LookAt(target);
+        }
     }
 
     public IEnumerator ShootCoroutine(float x)
@@ -31,7 +37,7 @@ public class CanonController : MonoBehaviour
 
     private void CreateBullet()
     {
-        GameObject newBullet = Instantiate(Bullet, transform.position + (transform.forward*0.5f), Quaternion.identity);
-        newBullet.GetComponent<Rigidbody>().AddForce(transform.forward * ShootSpeed);
+        GameObject newBullet = Instantiate(Bullet, firePosition.position, Quaternion.identity);
+        newBullet.GetComponent<Rigidbody>().AddForce(transform.up * ShootSpeed, ForceMode.Impulse);
     }
 }
