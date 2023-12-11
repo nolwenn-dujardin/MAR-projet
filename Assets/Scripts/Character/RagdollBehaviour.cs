@@ -25,7 +25,6 @@ public class RagDollBehaviour : MonoBehaviour
     {
         if (collider.tag.Equals("ObstacleDeath"))
         {
-            Debug.Log("Character death");
             EnableRagdoll();
         }
     }
