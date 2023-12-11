@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class RagDollBehaviour : MonoBehaviour
 {
+    private Rigidbody charBody;
     private Animator animator;
     private BasicBehaviour basicBehaviour;
     private MoveBehaviour moveBehaviour;
@@ -13,6 +14,7 @@ public class RagDollBehaviour : MonoBehaviour
 
     void Awake()
     {
+        charBody = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         basicBehaviour = GetComponent<BasicBehaviour>();
         moveBehaviour = GetComponent<MoveBehaviour>();
@@ -31,6 +33,7 @@ public class RagDollBehaviour : MonoBehaviour
 
     private void DisableRagdoll()
     {
+        charBody.isKinematic = false;
         animator.enabled = true;
         basicBehaviour.enabled = true;
         moveBehaviour.enabled = true;
@@ -39,6 +42,7 @@ public class RagDollBehaviour : MonoBehaviour
 
     private void EnableRagdoll()
     {
+        charBody.isKinematic = true;
         animator.enabled = false;
         basicBehaviour.enabled = false;
         moveBehaviour.enabled = false;

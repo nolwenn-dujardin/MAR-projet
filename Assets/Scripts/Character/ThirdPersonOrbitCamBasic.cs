@@ -174,7 +174,6 @@ public class ThirdPersonOrbitCamBasic : MonoBehaviour
 		// If a raycast from the check position to the player hits something...
 		if (Physics.SphereCast(checkPos, 0.2f, direction, out RaycastHit hit, direction.magnitude, layerMask))
 		{
-            Debug.Log("ViewingPosCheck Hit layer : " + hit.transform.gameObject.layer + "(Ragdoll : " + LayerMask.NameToLayer("Ragdoll") + ")");
             // ... if it is not the player...
             if (hit.transform != player && !hit.transform.GetComponent<Collider>().isTrigger)
 			{
@@ -194,7 +193,6 @@ public class ThirdPersonOrbitCamBasic : MonoBehaviour
 		Vector3 direction = checkPos - origin;
 		if (Physics.SphereCast(origin, 0.2f, direction, out RaycastHit hit, direction.magnitude, layerMask))
 		{
-            Debug.Log("ReverseViewingPosCheck Hit layer : " + hit.transform.gameObject.layer + "(Ragdoll : " + LayerMask.NameToLayer("Ragdoll") + ")");
             if (hit.transform != player && hit.transform != transform && !hit.transform.GetComponent<Collider>().isTrigger)
 			{
 				return false;
