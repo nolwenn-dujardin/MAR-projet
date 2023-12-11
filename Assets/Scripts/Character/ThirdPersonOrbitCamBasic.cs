@@ -25,9 +25,10 @@ public class ThirdPersonOrbitCamBasic : MonoBehaviour
 	private float targetFOV;                                           // Target camera Field of View.
 	private float targetMaxVerticalAngle;                              // Custom camera max vertical clamp angle.
 	private bool isCustomOffset;                                       // Boolean to determine whether or not a custom camera offset is being used.
+	private LayerMask layerMask;									   // LayerMask containing all layer except "Ragdoll" to ignore camera collision with ragdoll
 
-	// Get the camera horizontal angle.
-	public float GetH => angleH;
+    // Get the camera horizontal angle.
+    public float GetH => angleH;
 
 	void Awake()
 	{
@@ -52,7 +53,10 @@ public class ThirdPersonOrbitCamBasic : MonoBehaviour
 		if (camOffset.y > 0)
 			Debug.LogWarning("Vertical Cam Offset (Y) will be ignored during collisions!\n" +
 				"It is recommended to set all vertical offset in Pivot Offset.");
-	}
+
+        // Init layerMask to ignore "Ragdoll"
+        layerMask = ~LayerMask.GetMask("Ragdoll");
+    }
 
 	void Update()
 	{
@@ -161,17 +165,17 @@ public class ThirdPersonOrbitCamBasic : MonoBehaviour
 		return ViewingPosCheck (checkPos) && ReverseViewingPosCheck (checkPos);
 	}
 
-	// Check for collision from camera to player.
-	bool ViewingPosCheck (Vector3 checkPos)
+    // Check for collision from camera to player.
+    bool ViewingPosCheck (Vector3 checkPos)
 	{
 		// Cast target and direction.
 		Vector3 target = player.position + pivotOffset;
 		Vector3 direction = target - checkPos;
 		// If a raycast from the check position to the player hits something...
-		if (Physics.SphereCast(checkPos, 0.2f, direction, out RaycastHit hit, direction.magnitude))
+		if (Physics.SphereCast(checkPos, 0.2f, direction, out RaycastHit hit, direction.magnitude, layerMask))
 		{
-			// ... if it is not the player...
-			if(hit.transform != player && !hit.transform.GetComponent<Collider>().isTrigger)
+            // ... if it is not the player...
+            if (hit.transform != player && !hit.transform.GetComponent<Collider>().isTrigger)
 			{
 				// This position isn't appropriate.
 				return false;
@@ -187,9 +191,9 @@ public class ThirdPersonOrbitCamBasic : MonoBehaviour
 		// Cast origin and direction.
 		Vector3 origin = player.position + pivotOffset;
 		Vector3 direction = checkPos - origin;
-		if (Physics.SphereCast(origin, 0.2f, direction, out RaycastHit hit, direction.magnitude))
+		if (Physics.SphereCast(origin, 0.2f, direction, out RaycastHit hit, direction.magnitude, layerMask))
 		{
-			if(hit.transform != player && hit.transform != transform && !hit.transform.GetComponent<Collider>().isTrigger)
+            if (hit.transform != player && hit.transform != transform && !hit.transform.GetComponent<Collider>().isTrigger)
 			{
 				return false;
 			}
