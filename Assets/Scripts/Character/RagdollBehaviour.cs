@@ -7,6 +7,7 @@ using UnityEngine;
 public class RagDollBehaviour : MonoBehaviour
 {
     private Rigidbody charBody;
+    private Collider[] colliders;
     private Animator animator;
     private BasicBehaviour basicBehaviour;
     private MoveBehaviour moveBehaviour;
@@ -15,6 +16,7 @@ public class RagDollBehaviour : MonoBehaviour
     void Awake()
     {
         charBody = GetComponent<Rigidbody>();
+        colliders = GetComponents<Collider>();
         animator = GetComponent<Animator>();
         basicBehaviour = GetComponent<BasicBehaviour>();
         moveBehaviour = GetComponent<MoveBehaviour>();
@@ -25,7 +27,8 @@ public class RagDollBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.tag.Equals("ObstacleDeath"))
+        Debug.Log("Ragdoll collider tag : " + collider.tag);
+        if (collider.CompareTag("ObstacleDeath") || collider.CompareTag("Projectile"))
         {
             EnableRagdoll();
         }
@@ -34,6 +37,10 @@ public class RagDollBehaviour : MonoBehaviour
     private void DisableRagdoll()
     {
         charBody.isKinematic = false;
+        foreach(Collider collider in colliders)
+        {
+            collider.enabled = true;
+        }
         animator.enabled = true;
         basicBehaviour.enabled = true;
         moveBehaviour.enabled = true;
@@ -43,6 +50,10 @@ public class RagDollBehaviour : MonoBehaviour
     private void EnableRagdoll()
     {
         charBody.isKinematic = true;
+        foreach (Collider collider in colliders)
+        {
+            collider.enabled = false;
+        }
         animator.enabled = false;
         basicBehaviour.enabled = false;
         moveBehaviour.enabled = false;
