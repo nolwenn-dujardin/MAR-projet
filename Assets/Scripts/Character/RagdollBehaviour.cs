@@ -6,12 +6,17 @@ using UnityEngine;
 
 public class RagDollBehaviour : MonoBehaviour
 {
+    public GameObject character;
+    public GameObject ragdollTarget;
+    public int ragdollDurationSeconds = 3;
+
     private Rigidbody charBody;
     private Collider[] colliders;
     private Animator animator;
     private BasicBehaviour basicBehaviour;
     private MoveBehaviour moveBehaviour;
     private AimBehaviourBasic aimBehaviourBasic;
+    private bool lockRagdoll = false;
 
     void Awake()
     {
@@ -25,17 +30,30 @@ public class RagDollBehaviour : MonoBehaviour
         DisableRagdoll();
     }
 
+    public void LockRagdoll()
+    {
+        lockRagdoll = true;
+    }
+
     private void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("Ragdoll collider tag : " + collider.tag);
-        if (collider.CompareTag("ObstacleDeath") || collider.CompareTag("Projectile"))
+        if (!lockRagdoll)
         {
-            EnableRagdoll();
+            if (collider.CompareTag("ObstacleDeath") || collider.CompareTag("Projectile"))
+            {
+                EnableRagdoll();
+                StartCoroutine(RagdollTimer());
+            }
         }
     }
 
     private void DisableRagdoll()
     {
+        // Reset character position to ragdoll position
+        Debug.Log("Reset position : " + ragdollTarget.transform.position);
+        Debug.Log("Old position : " + character.transform.position);
+        character.transform.position = ragdollTarget.transform.position;
+
         charBody.isKinematic = false;
         foreach(Collider collider in colliders)
         {
@@ -58,5 +76,18 @@ public class RagDollBehaviour : MonoBehaviour
         basicBehaviour.enabled = false;
         moveBehaviour.enabled = false;
         aimBehaviourBasic.enabled = false;
+    }
+
+    private IEnumerator RagdollTimer()
+    {
+        int timeRemaining = ragdollDurationSeconds;
+
+        while (timeRemaining > 0)
+        {
+            yield return new WaitForSeconds(1);
+            timeRemaining -= 1;
+        }
+
+        DisableRagdoll();
     }
 }
