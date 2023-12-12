@@ -8,8 +8,9 @@ public class CanonController : MonoBehaviour
     public GameObject Bullet;
     public float ShootSpeed;
     public Transform firePosition;
-
     public Transform target;
+
+    public bool activateCoroutine = false;
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +22,7 @@ public class CanonController : MonoBehaviour
     void Update()
     {
         //Target a specific object
-        if(target != null){
+        if(target != null && activateCoroutine){
             transform.parent.LookAt(target);
         }
     }
@@ -30,7 +31,9 @@ public class CanonController : MonoBehaviour
     {
         while(true)
         {
-            CreateBullet();
+            if(activateCoroutine) {
+                CreateBullet();
+            }
             yield return new WaitForSeconds(x);
         }
     }
@@ -39,5 +42,16 @@ public class CanonController : MonoBehaviour
     {
         GameObject newBullet = Instantiate(Bullet, firePosition.position, Quaternion.identity);
         newBullet.GetComponent<Rigidbody>().AddForce(transform.up * ShootSpeed, ForceMode.Impulse);
+    }
+
+    public void ActivateCoroutine()
+    {
+        activateCoroutine = true;
+        
+    }
+
+    public void DeactivateCoroutine()
+    {
+        activateCoroutine = false;
     }
 }
