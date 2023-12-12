@@ -7,7 +7,7 @@ using UnityEngine;
 public class RagDollBehaviour : MonoBehaviour
 {
     public GameObject character;
-    public GameObject ragdollTarget;
+    public GameObject hips;
     public int ragdollDurationSeconds = 3;
 
     private Rigidbody charBody;
@@ -50,9 +50,7 @@ public class RagDollBehaviour : MonoBehaviour
     private void DisableRagdoll()
     {
         // Reset character position to ragdoll position
-        Debug.Log("Reset position : " + ragdollTarget.transform.position);
-        Debug.Log("Old position : " + character.transform.position);
-        character.transform.position = ragdollTarget.transform.position;
+        character.transform.position = hips.transform.position;
 
         charBody.isKinematic = false;
         foreach(Collider collider in colliders)
