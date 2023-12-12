@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class RagDollBehaviour : MonoBehaviour
+public class RagdollBehaviour : MonoBehaviour
 {
     public GameObject character;
     public GameObject hips;
     public int ragdollDurationSeconds = 3;
+    public bool ragdollOn = false;
 
     private Rigidbody charBody;
     private Collider[] colliders;
@@ -35,18 +36,6 @@ public class RagDollBehaviour : MonoBehaviour
         lockRagdoll = true;
     }
 
-    private void OnTriggerEnter(Collider collider)
-    {
-        if (!lockRagdoll)
-        {
-            if (collider.CompareTag("ObstacleDeath") || collider.CompareTag("Projectile"))
-            {
-                EnableRagdoll();
-                StartCoroutine(RagdollTimer());
-            }
-        }
-    }
-
     private void DisableRagdoll()
     {
         // Reset character position to ragdoll position
@@ -61,22 +50,29 @@ public class RagDollBehaviour : MonoBehaviour
         basicBehaviour.enabled = true;
         moveBehaviour.enabled = true;
         aimBehaviourBasic.enabled = true;
+
+        ragdollOn = false;
     }
 
-    private void EnableRagdoll()
+    public void EnableRagdoll()
     {
-        charBody.isKinematic = true;
-        foreach (Collider collider in colliders)
+        if (!lockRagdoll)
         {
-            collider.enabled = false;
+            charBody.isKinematic = true;
+            foreach (Collider collider in colliders)
+            {
+                collider.enabled = false;
+            }
+            animator.enabled = false;
+            basicBehaviour.enabled = false;
+            moveBehaviour.enabled = false;
+            aimBehaviourBasic.enabled = false;
+
+            ragdollOn = true;
         }
-        animator.enabled = false;
-        basicBehaviour.enabled = false;
-        moveBehaviour.enabled = false;
-        aimBehaviourBasic.enabled = false;
     }
 
-    private IEnumerator RagdollTimer()
+    public IEnumerator RagdollTimer()
     {
         int timeRemaining = ragdollDurationSeconds;
 

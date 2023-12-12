@@ -26,10 +26,11 @@ public class BasicBehaviour : MonoBehaviour
 	private List<GenericBehaviour> overridingBehaviours;  // List of current overriding behaviours.
 	private Rigidbody rBody;                              // Reference to the player's rigidbody.
 	private int groundedBool;                             // Animator variable related to whether or not the player is on the ground.
-	private Vector3 colExtents;                           // Collider extents for ground test. 
+	private Vector3 colExtents;                           // Collider extents for ground test.
+    private LayerMask layerMask;                          // LayerMask containing all layer except "Ragdoll" to ignore camera collision with ragdoll
 
-	// Get current horizontal and vertical axes.
-	public float GetH => h;
+    // Get current horizontal and vertical axes.
+    public float GetH => h;
 	public float GetV => v;
 
 	// Get the player camera script.
@@ -58,7 +59,10 @@ public class BasicBehaviour : MonoBehaviour
 		// Grounded verification variables.
 		groundedBool = Animator.StringToHash("Grounded");
 		colExtents = GetComponent<Collider>().bounds.extents;
-	}
+
+        // Init layerMask to ignore "Ragdoll"
+        layerMask = ~LayerMask.GetMask("Ragdoll");
+    }
 
 	void Update()
 	{
@@ -322,7 +326,7 @@ public class BasicBehaviour : MonoBehaviour
 	public bool IsGrounded()
 	{
 		Ray ray = new Ray(this.transform.position + Vector3.up * (2 * colExtents.x), Vector3.down);
-		return Physics.SphereCast(ray, colExtents.x, colExtents.x + 0.2f);
+		return Physics.SphereCast(ray, colExtents.x, colExtents.x + 0.2f, layerMask);
 	}
 }
 
