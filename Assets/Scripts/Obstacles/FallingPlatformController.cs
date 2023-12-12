@@ -7,6 +7,8 @@ public class FallingPlatformController : MonoBehaviour
     public bool shouldFall = false;
     public float fallDelay = 0f;
 
+    public float delayBeforeDestroy = 5f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,5 +37,7 @@ public class FallingPlatformController : MonoBehaviour
             Debug.Log("Falling");
             this.GetComponent<Rigidbody>().isKinematic = false;
             this.GetComponent<Rigidbody>().useGravity = true;
+            yield return new WaitForSeconds(delayBeforeDestroy);
+            Destroy (gameObject.transform.parent.gameObject);
     }
 }
