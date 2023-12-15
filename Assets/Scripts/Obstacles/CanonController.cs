@@ -9,6 +9,7 @@ public class CanonController : MonoBehaviour
     public float ShootSpeed;
     public Transform firePosition;
     public Transform target;
+    public AudioSource soundEffect;
 
     public bool activateCoroutine = false;
 
@@ -42,6 +43,8 @@ public class CanonController : MonoBehaviour
     {
         GameObject newBullet = Instantiate(Bullet, firePosition.position, Quaternion.identity);
         newBullet.GetComponent<Rigidbody>().AddForce(transform.up * ShootSpeed, ForceMode.Impulse);
+
+        soundEffect.PlayOneShot(soundEffect.clip,0.5f);
     }
 
     public void ActivateCoroutine()
