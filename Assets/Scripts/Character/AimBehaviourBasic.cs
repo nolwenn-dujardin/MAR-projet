@@ -11,40 +11,45 @@ public class AimBehaviourBasic : GenericBehaviour
 	public Vector3 aimCamOffset   = new Vector3(0f, 0.4f, -0.7f);         // Offset to relocate the camera when aiming.
 
 	private int aimBool;                                                  // Animator variable related to aiming.
-	private bool aim;                                                     // Boolean to determine whether or not the player is aiming.
+    private int ragdollBool;											  // Animator variable related to ragdoll.
+    private bool aim;                                                     // Boolean to determine whether or not the player is aiming.
 
 	// Start is always called after any Awake functions.
 	void Start ()
 	{
 		// Set up the references.
 		aimBool = Animator.StringToHash("Aim");
-	}
+        ragdollBool = Animator.StringToHash("Ragdoll");
+    }
 
 	// Update is used to set features regardless the active behaviour.
 	void Update ()
 	{
-		// Activate/deactivate aim by input.
-		if (Input.GetAxisRaw(aimButton) != 0 && !aim)
+		if (!behaviourManager.GetAnim.GetBool(ragdollBool))
 		{
-			StartCoroutine(ToggleAimOn());
-		}
-		else if (aim && Input.GetAxisRaw(aimButton) == 0)
-		{
-			StartCoroutine(ToggleAimOff());
-		}
+			// Activate/deactivate aim by input.
+			if (Input.GetAxisRaw(aimButton) != 0 && !aim)
+			{
+				StartCoroutine(ToggleAimOn());
+			}
+			else if (aim && Input.GetAxisRaw(aimButton) == 0)
+			{
+				StartCoroutine(ToggleAimOff());
+			}
 
-		// No sprinting while aiming.
-		canSprint = !aim;
+			// No sprinting while aiming.
+			canSprint = !aim;
 
-		// Toggle camera aim position left or right, switching shoulders.
-		if (aim && Input.GetButtonDown (shoulderButton))
-		{
-			aimCamOffset.x = aimCamOffset.x * (-1);
-			aimPivotOffset.x = aimPivotOffset.x * (-1);
+			// Toggle camera aim position left or right, switching shoulders.
+			if (aim && Input.GetButtonDown(shoulderButton))
+			{
+				aimCamOffset.x = aimCamOffset.x * (-1);
+				aimPivotOffset.x = aimPivotOffset.x * (-1);
+			}
+
+			// Set aim boolean on the Animator Controller.
+			behaviourManager.GetAnim.SetBool(aimBool, aim);
 		}
-
-		// Set aim boolean on the Animator Controller.
-		behaviourManager.GetAnim.SetBool (aimBool, aim);
 	}
 
 	// Co-routine to start aiming mode with delay.

@@ -18,7 +18,6 @@ public class RagdollTrigger : MonoBehaviour
         {
             if (collider.CompareTag("ObstacleDeath") || collider.CompareTag("Projectile"))
             {
-                ragdollBehaviour.EnableRagdoll();
                 StartCoroutine(ragdollBehaviour.RagdollTimer());
             }
         }

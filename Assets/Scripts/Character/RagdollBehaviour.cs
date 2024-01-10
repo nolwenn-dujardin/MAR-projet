@@ -1,10 +1,7 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-public class RagdollBehaviour : MonoBehaviour
+public class RagdollBehaviour : GenericBehaviour
 {
     public GameObject character;
     public GameObject hips;
@@ -13,75 +10,72 @@ public class RagdollBehaviour : MonoBehaviour
 
     private Rigidbody charBody;
     private Collider[] colliders;
-    private Animator animator;
-    private BasicBehaviour basicBehaviour;
-    private MoveBehaviour moveBehaviour;
-    private AimBehaviourBasic aimBehaviourBasic;
-    private bool lockRagdoll = false;
+    private bool ragdollLocked = false;
+    private int ragdollBool;                           // Animator variable related to ragdoll.
 
-    void Awake()
+    private void Start()
     {
         charBody = GetComponent<Rigidbody>();
         colliders = GetComponents<Collider>();
-        animator = GetComponent<Animator>();
-        basicBehaviour = GetComponent<BasicBehaviour>();
-        moveBehaviour = GetComponent<MoveBehaviour>();
-        aimBehaviourBasic = GetComponent<AimBehaviourBasic>();
-
-        DisableRagdoll();
+        ragdollBool = Animator.StringToHash("Ragdoll");
     }
 
     public void LockRagdoll()
     {
-        lockRagdoll = true;
+        ragdollLocked = true;
     }
 
     private void DisableRagdoll()
     {
-        // Reset character position to ragdoll position
-        character.transform.position = hips.transform.position;
-
-        charBody.isKinematic = false;
-        foreach(Collider collider in colliders)
+        if (!ragdollLocked)
         {
-            collider.enabled = true;
-        }
-        animator.enabled = true;
-        basicBehaviour.enabled = true;
-        moveBehaviour.enabled = true;
-        aimBehaviourBasic.enabled = true;
+            // Reset character position to ragdoll position
+            character.transform.position = hips.transform.position;
 
-        ragdollOn = false;
+            charBody.isKinematic = false;
+            foreach(Collider collider in colliders)
+            {
+                collider.enabled = true;
+            }
+
+            behaviourManager.GetAnim.enabled = true;
+
+            behaviourManager.GetAnim.Play("Getting Up");
+
+            behaviourManager.GetAnim.Update(0);
+
+            StartCoroutine(EnableBehaviourTimed());
+        }
     }
 
-    public void EnableRagdoll()
+    private IEnumerator EnableBehaviourTimed()
     {
-        if (!lockRagdoll)
-        {
-            charBody.isKinematic = true;
-            foreach (Collider collider in colliders)
-            {
-                collider.enabled = false;
-            }
-            animator.enabled = false;
-            basicBehaviour.enabled = false;
-            moveBehaviour.enabled = false;
-            aimBehaviourBasic.enabled = false;
+        float gettingUpAnimDuration = behaviourManager.GetAnim.GetCurrentAnimatorStateInfo(0).length;
+        yield return new WaitForSeconds(gettingUpAnimDuration);
 
-            ragdollOn = true;
+        // Ragdoll end after getting up animation
+        ragdollOn = false;
+        behaviourManager.GetAnim.SetBool(ragdollBool, false);
+    }
+
+    private void EnableRagdoll()
+    {
+        charBody.isKinematic = true;
+        foreach (Collider collider in colliders)
+        {
+            collider.enabled = false;
         }
+
+        ragdollOn = true;
+        behaviourManager.GetAnim.SetBool(ragdollBool, true);
+
+        behaviourManager.GetAnim.enabled = false;
     }
 
     public IEnumerator RagdollTimer()
     {
-        int timeRemaining = ragdollDurationSeconds;
-
-        while (timeRemaining > 0)
-        {
-            yield return new WaitForSeconds(1);
-            timeRemaining -= 1;
-        }
-
+        EnableRagdoll();
+        yield return new WaitForSeconds(ragdollDurationSeconds);
         DisableRagdoll();
     }
 }

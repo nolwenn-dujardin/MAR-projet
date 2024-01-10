@@ -13,9 +13,10 @@ public class MoveBehaviour : GenericBehaviour
 	public float jumpInertialForce = 10f;          // Default horizontal inertial force when jumping.
 
 	private float speed, speedSeeker;               // Moving speed.
-	private int jumpBool;                           // Animator variable related to jumping.
+    private int jumpBool;                           // Animator variable related to jumping.
 	private int groundedBool;                       // Animator variable related to whether or not the player is on ground.
-	private bool jump;                              // Boolean to determine whether or not the player started a jump.
+	private int ragdollBool;						// Animator variable related to ragdoll.
+    private bool jump;                              // Boolean to determine whether or not the player started a jump.
 	private bool isColliding;                       // Boolean to determine if the player has collided with an obstacle.
 
 	// Start is always called after any Awake functions.
@@ -25,6 +26,7 @@ public class MoveBehaviour : GenericBehaviour
 		jumpBool = Animator.StringToHash("Jump");
 		groundedBool = Animator.StringToHash("Grounded");
 		behaviourManager.GetAnim.SetBool(groundedBool, true);
+		ragdollBool = Animator.StringToHash("Ragdoll");
 
 		// Subscribe and register this behaviour as the default behaviour.
 		behaviourManager.SubscribeBehaviour(this);
@@ -35,8 +37,8 @@ public class MoveBehaviour : GenericBehaviour
 	// Update is used to set features regardless the active behaviour.
 	void Update()
 	{
-		// Get jump input.
-		if (!jump && Input.GetButtonDown(jumpButton) && behaviourManager.IsCurrentBehaviour(this.behaviourCode) && !behaviourManager.IsOverriding())
+        // Get jump input.
+        if (!jump && Input.GetButtonDown(jumpButton) && behaviourManager.IsCurrentBehaviour(this.behaviourCode) && !behaviourManager.IsOverriding())
 		{
 			jump = true;
 		}
@@ -56,7 +58,7 @@ public class MoveBehaviour : GenericBehaviour
 	void JumpManagement()
 	{
 		// Start a new jump.
-		if (jump && !behaviourManager.GetAnim.GetBool(jumpBool) && behaviourManager.IsGrounded())
+		if (jump && !behaviourManager.GetAnim.GetBool(jumpBool) && behaviourManager.IsGrounded() && !behaviourManager.GetAnim.GetBool(ragdollBool))
 		{
 			// Set jump related parameters.
 			behaviourManager.LockTempBehaviour(this.behaviourCode);
@@ -73,7 +75,7 @@ public class MoveBehaviour : GenericBehaviour
 				float velocity = 2f * Mathf.Abs(Physics.gravity.y) * jumpHeight;
 				velocity = Mathf.Sqrt(velocity);
 				behaviourManager.GetRigidBody.AddForce(Vector3.up * velocity, ForceMode.VelocityChange);
-			}
+			} 
 		}
 		// Is already jumping?
 		else if (behaviourManager.GetAnim.GetBool(jumpBool))
@@ -114,16 +116,17 @@ public class MoveBehaviour : GenericBehaviour
 		// Call function that deals with player orientation.
 		Rotating(horizontal, vertical);
 
-		// Set proper speed.
-		Vector2 dir = new Vector2(horizontal, vertical);
-		speed = Vector2.ClampMagnitude(dir, 1f).magnitude;
-		// This is for PC only, gamepads control speed via analog stick.
-		speedSeeker += Input.GetAxis("Mouse ScrollWheel");
-		speedSeeker = Mathf.Clamp(speedSeeker, walkSpeed, runSpeed);
-		speed *= speedSeeker;
-		if (behaviourManager.IsSprinting())
+        // Set proper speed.
+        Vector2 dir = new Vector2(horizontal, vertical);
+        speed = Vector2.ClampMagnitude(dir, 1f).magnitude;
+
+        // This is for PC only, gamepads control speed via analog stick.
+        speedSeeker += Input.GetAxis("Mouse ScrollWheel");
+        speedSeeker = Mathf.Clamp(speedSeeker, walkSpeed, runSpeed);
+        speed *= speedSeeker;
+        if (behaviourManager.IsSprinting())
 		{
-			speed = sprintSpeed;
+            speed = sprintSpeed;
 		}
 
 		behaviourManager.GetAnim.SetFloat(speedFloat, speed, speedDampTime, Time.deltaTime);
