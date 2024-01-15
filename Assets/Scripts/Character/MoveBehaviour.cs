@@ -54,11 +54,13 @@ public class MoveBehaviour : GenericBehaviour
 		JumpManagement();
 	}
 
-	// Execute the idle and walk/run jump movements.
-	void JumpManagement()
+    Vector3 horizontalVelocity = new Vector3();
+
+    // Execute the idle and walk/run jump movements.
+    void JumpManagement()
 	{
-		// Start a new jump.
-		if (jump && !behaviourManager.GetAnim.GetBool(jumpBool) && behaviourManager.IsGrounded() && !behaviourManager.GetAnim.GetBool(ragdollBool))
+        // Start a new jump.
+        if (jump && !behaviourManager.GetAnim.GetBool(jumpBool) && behaviourManager.IsGrounded() && !behaviourManager.GetAnim.GetBool(ragdollBool))
 		{
 			// Set jump related parameters.
 			behaviourManager.LockTempBehaviour(this.behaviourCode);
@@ -69,13 +71,18 @@ public class MoveBehaviour : GenericBehaviour
 				// Temporarily change player friction to pass through obstacles.
 				GetComponent<CapsuleCollider>().material.dynamicFriction = 0f;
 				GetComponent<CapsuleCollider>().material.staticFriction = 0f;
+
 				// Remove vertical velocity to avoid "super jumps" on slope ends.
 				RemoveVerticalVelocity();
+
 				// Set jump vertical impulse velocity.
 				float velocity = 2f * Mathf.Abs(Physics.gravity.y) * jumpHeight;
 				velocity = Mathf.Sqrt(velocity);
 				behaviourManager.GetRigidBody.AddForce(Vector3.up * velocity, ForceMode.VelocityChange);
-			} 
+
+				// Save horizontal speed before jump
+                horizontalVelocity = new Vector3(behaviourManager.GetRigidBody.velocity.x, 0f, behaviourManager.GetRigidBody.velocity.z);
+            } 
 		}
 		// Is already jumping?
 		else if (behaviourManager.GetAnim.GetBool(jumpBool))
@@ -83,8 +90,8 @@ public class MoveBehaviour : GenericBehaviour
 			// Keep forward movement while in the air.
 			if (!behaviourManager.IsGrounded() && !isColliding && behaviourManager.GetTempLockStatus())
 			{
-				behaviourManager.GetRigidBody.AddForce(transform.forward * (jumpInertialForce * Physics.gravity.magnitude * sprintSpeed), ForceMode.Acceleration);
-			}
+                behaviourManager.GetRigidBody.AddForce(horizontalVelocity, ForceMode.VelocityChange);
+            }
 			// Has landed?
 			if ((behaviourManager.GetRigidBody.velocity.y < 0) && behaviourManager.IsGrounded())
 			{
