@@ -46,8 +46,11 @@ public class Success : LevelState
 
             // Play end animation
             Animator animator = character.GetComponent<Animator>();
+            animator.Play("Samba");
 
-            //animator.Play("Success");
+            // Set succeed music
+            AudioSource audioSource = GetComponentInChildren<AudioSource>();
+            audioSource.Play();
 
             // Create points for camera movement
             Vector3 center = transform.position;
