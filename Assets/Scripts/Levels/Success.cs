@@ -6,6 +6,8 @@ using UnityEngine.TextCore.Text;
 
 public class Success : LevelState
 {
+    public List<AudioClip> succeedMusics = new List<AudioClip>();
+
     private GameObject character;
     private new Camera camera;
 
@@ -46,10 +48,11 @@ public class Success : LevelState
 
             // Play end animation
             Animator animator = character.GetComponent<Animator>();
-            animator.Play("Samba");
+            animator.Play("Chicken Dance");
 
             // Set succeed music
             AudioSource audioSource = GetComponentInChildren<AudioSource>();
+            audioSource.clip = succeedMusics[new System.Random().Next(0, 0)];
             audioSource.Play();
 
             // Create points for camera movement
