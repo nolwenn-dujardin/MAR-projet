@@ -28,6 +28,7 @@ public class Success : LevelState
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            Debug.Log("Player triggered finish");
             character = other.gameObject;
 
             SucceedBehaviour();
@@ -78,25 +79,25 @@ public class Success : LevelState
     {
         if (CurrentState == State.Succeed && pointTimerEnded)
         {
-            // Déplacement de la caméra vers le point suivant
+            // Dï¿½placement de la camï¿½ra vers le point suivant
             Vector3 pointCible = camMovePoints[camCurrentPoints];
             float distance = Vector3.Distance(camera.transform.position, pointCible);
 
             if (distance > 0.1f)
             {
-                // Déplacement de la caméra vers le point cible
+                // Dï¿½placement de la camï¿½ra vers le point cible
                 camera.transform.position = Vector3.MoveTowards(camera.transform.position, pointCible, camSpeed * Time.deltaTime);
             }
             else
             {
-                // Passer au point de déplacement suivant une fois que le point actuel est atteint
+                // Passer au point de dï¿½placement suivant une fois que le point actuel est atteint
                 camCurrentPoints = (camCurrentPoints + 1) % camMovePoints.Count;
 
                 // Attendre au point
                 StartCoroutine(MoveCamera());
             }
 
-            // Orienter la caméra vers le personnage
+            // Orienter la camï¿½ra vers le personnage
             camera.transform.LookAt(lookTarget);
         }
     }
