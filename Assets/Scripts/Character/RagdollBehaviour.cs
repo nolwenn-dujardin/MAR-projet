@@ -80,18 +80,24 @@ public class RagdollBehaviour : GenericBehaviour
     private IEnumerator RagdollTimer()
     {
         EnableRagdoll();
+
+        if (ragdollLocked)
+        {
+            // Change ragdoll parent
+            GameObject ragdoll = new GameObject("ragdoll");
+            ragdoll.transform.parent = ragdollsStock.transform;
+            transform.Find("skeleton").parent = ragdoll.transform;
+            transform.Find("shadow_mesh").parent = ragdoll.transform;
+
+            // Remove current useless object
+            Destroy(gameObject);
+        }
+
         yield return new WaitForSeconds(ragdollDurationSeconds);
 
         if (!ragdollLocked)
         {
             DisableRagdoll();
-        } else
-        {
-            // Change ragdoll parent
-            transform.Find("skeleton").parent = ragdollsStock.transform;
-
-            // Remove current useless object
-            Destroy(gameObject);
         }
     }
 
