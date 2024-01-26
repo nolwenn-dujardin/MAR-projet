@@ -14,11 +14,11 @@ public class RagdollTrigger : MonoBehaviour
     // Permettre l'état ragdoll s'il n'est pas déjà actif
     private void OnTriggerEnter(Collider collider)
     {
-        if (!ragdollBehaviour.ragdollOn)
+        if (!ragdollBehaviour.GetRagdollOn)
         {
             if (collider.CompareTag("ObstacleDeath") || collider.CompareTag("Projectile"))
             {
-                StartCoroutine(ragdollBehaviour.RagdollTimer());
+                ragdollBehaviour.StartRagdollTimer();
             }
         }
     }

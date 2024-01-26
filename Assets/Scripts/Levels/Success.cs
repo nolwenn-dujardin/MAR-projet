@@ -10,6 +10,8 @@ public class Success : LevelState
 
     private GameObject character;
     private new Camera camera;
+    private Animator animator;
+    private RagdollBehaviour ragdollBehaviour;
 
     // For Cam movement around character
     private float camSpeed = 2.5f;
@@ -28,8 +30,9 @@ public class Success : LevelState
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Player triggered finish");
             character = other.gameObject;
+            animator = character.GetComponent<Animator>();
+            ragdollBehaviour = character.GetComponent<RagdollBehaviour>();
 
             SucceedBehaviour();
         }
@@ -37,7 +40,7 @@ public class Success : LevelState
 
     private void SucceedBehaviour() 
     {
-        if (CurrentState == State.Started && pointTimerEnded)
+        if (CurrentState == State.Started)
         {
             // Change camera
             character.GetComponentInChildren<Camera>().enabled = false;
@@ -45,20 +48,19 @@ public class Success : LevelState
 
             // Set cam look target
             lookTarget = character.transform.position;
-            lookTarget.y = character.transform.localScale.y;
+            lookTarget.y = character.transform.position.y + character.transform.localScale.y;
 
             // Play end animation
-            Animator animator = character.GetComponent<Animator>();
-            animator.Play("Chicken Dance");
+            animator.Play("Victory");
 
             // Set succeed music
             AudioSource audioSource = GetComponentInChildren<AudioSource>();
-            audioSource.clip = succeedMusics[new System.Random().Next(0, 0)];
+            audioSource.clip = succeedMusics[new System.Random().Next(0, succeedMusics.Count)];
             audioSource.Play();
 
             // Create points for camera movement
             Vector3 center = transform.position;
-            float camHeigth = character.transform.localScale.y * 2;
+            float camHeigth = character.transform.position.y + character.transform.localScale.y * 2;
 
             Vector3 point1 = new Vector3(center.x + 2, camHeigth, center.z + 2);
             Vector3 point2 = new Vector3(center.x + 2, camHeigth, center.z - 2);
@@ -99,6 +101,11 @@ public class Success : LevelState
 
             // Orienter la cam�ra vers le personnage
             camera.transform.LookAt(lookTarget);
+
+            if (!ragdollBehaviour.GetRagdollLocked && animator.GetCurrentAnimatorStateInfo(0).IsName("End Succeed Animations"))
+            {
+                ragdollBehaviour.StartRagdollTimerNLock();
+            }
         }
     }
 
