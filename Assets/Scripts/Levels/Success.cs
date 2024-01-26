@@ -51,7 +51,7 @@ public class Success : LevelState
             lookTarget.y = character.transform.position.y + character.transform.localScale.y;
 
             // Play end animation
-            animator.Play("Victory");
+            animator.Play("Chicken Dance");
 
             // Set succeed music
             AudioSource audioSource = GetComponentInChildren<AudioSource>();
