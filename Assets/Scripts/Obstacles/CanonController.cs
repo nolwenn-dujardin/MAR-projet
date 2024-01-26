@@ -9,6 +9,7 @@ public class CanonController : MonoBehaviour
     public float ShootSpeed;
     public Transform firePosition;
     public Transform target;
+    public float elevation;
     public AudioSource soundEffect;
 
     public bool activateCoroutine = false;
@@ -24,7 +25,7 @@ public class CanonController : MonoBehaviour
     {
         //Target a specific object
         if(target != null && activateCoroutine){
-            transform.parent.LookAt(target);
+            transform.parent.LookAt(new Vector3(target.position.x, target.position.y + elevation, target.position.z));
         }
     }
 

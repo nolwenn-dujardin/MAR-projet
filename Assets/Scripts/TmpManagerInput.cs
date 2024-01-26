@@ -13,6 +13,8 @@ public class TmpManagerInput : MonoBehaviour
 
     public static TmpManagerInput Instance;
 
+    public CanonController[] canons;
+
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +35,11 @@ public class TmpManagerInput : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.R)){
             player.transform.position = checkpointPos.transform.position;
+
+            //Désactiver les coroutines des canons, sinon ils continuent à target le joueur car pour eux il n'a jamais quitter la zone de trigger
+            foreach(CanonController canon in canons){
+              canon.DeactivateCoroutine();
+            }
         }
     }
 
