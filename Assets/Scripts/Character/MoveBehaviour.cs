@@ -93,7 +93,7 @@ public class MoveBehaviour : GenericBehaviour
                 behaviourManager.GetRigidBody.AddForce(horizontalVelocity, ForceMode.VelocityChange);
             }
 			// Has landed?
-			if ((behaviourManager.GetRigidBody.velocity.y < 0) && behaviourManager.IsGrounded())
+			if ((behaviourManager.GetRigidBody.velocity.y <= 0) && behaviourManager.IsGrounded())
 			{
 				behaviourManager.GetAnim.SetBool(groundedBool, true);
 				// Change back player friction to default.
