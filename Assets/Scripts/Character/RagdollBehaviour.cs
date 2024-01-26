@@ -7,17 +7,20 @@ public class RagdollBehaviour : GenericBehaviour
     public GameObject hips;
     public int ragdollDurationSeconds = 3;
 
+    private GameObject ragdollsStock;                    // Gameobject to stock only ragdolls
+
     private Rigidbody charBody;
-    private Collider[] colliders;
+    private Collider[] colliders;                       // Contains ragdoll colliders
 
     private bool ragdollOn = false;
     private bool ragdollLocked = false;
-    private int ragdollBool;                           // Animator variable related to ragdoll.
+    private int ragdollBool;                            // Animator variable related to ragdoll.
 
     public bool GetRagdollLocked => ragdollLocked;
 
     private void Start()
     {
+        ragdollsStock = GameObject.Find("Ragdolls");
         charBody = GetComponent<Rigidbody>();
         colliders = GetComponents<Collider>();
         ragdollBool = Animator.StringToHash("Ragdoll");
@@ -82,6 +85,13 @@ public class RagdollBehaviour : GenericBehaviour
         if (!ragdollLocked)
         {
             DisableRagdoll();
+        } else
+        {
+            // Change ragdoll parent
+            transform.Find("skeleton").parent = ragdollsStock.transform;
+
+            // Remove current useless object
+            Destroy(gameObject);
         }
     }
 

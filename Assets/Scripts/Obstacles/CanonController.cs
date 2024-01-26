@@ -4,19 +4,20 @@ using UnityEngine;
 
 public class CanonController : MonoBehaviour
 {
-   public float ReloadTime;
+    public float ReloadTime;
     public GameObject Bullet;
     public float ShootSpeed;
     public Transform firePosition;
-    public Transform target;
-    public float elevation;
     public AudioSource soundEffect;
 
-    public bool activateCoroutine = false;
+    private bool activateCoroutine = false;
+    private Transform canon;
+    private Transform target;
 
     // Start is called before the first frame update
     void Start()
     {
+        canon = transform.GetChild(0);
         StartCoroutine(ShootCoroutine(ReloadTime));
     }
 
@@ -25,7 +26,7 @@ public class CanonController : MonoBehaviour
     {
         //Target a specific object
         if(target != null && activateCoroutine){
-            transform.parent.LookAt(new Vector3(target.position.x, target.position.y + elevation, target.position.z));
+            canon.LookAt(new Vector3(target.position.x, target.position.y + target.localScale.y, target.position.z));
         }
     }
 
@@ -43,19 +44,26 @@ public class CanonController : MonoBehaviour
     private void CreateBullet()
     {
         GameObject newBullet = Instantiate(Bullet, firePosition.position, Quaternion.identity);
-        newBullet.GetComponent<Rigidbody>().AddForce(transform.up * ShootSpeed, ForceMode.Impulse);
+        newBullet.GetComponent<Rigidbody>().AddForce(canon.forward * ShootSpeed, ForceMode.Impulse);
 
         soundEffect.PlayOneShot(soundEffect.clip,0.5f);
     }
 
-    public void ActivateCoroutine()
+    private void OnTriggerEnter(Collider other)
     {
-        activateCoroutine = true;
-        
+        if (other.gameObject.CompareTag("Player"))
+        {
+            target = other.transform;
+            activateCoroutine = true;
+        }
     }
 
-    public void DeactivateCoroutine()
+    private void OnTriggerExit(Collider other)
     {
-        activateCoroutine = false;
+        if (other.gameObject.CompareTag("Player")) 
+        {
+            target = null;
+            activateCoroutine = false;
+        }
     }
 }
