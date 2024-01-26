@@ -5,13 +5,16 @@ using UnityEngine;
 public class TmpManagerInput : MonoBehaviour
 {
     public GameObject checkpointPos;
-    public GameObject player;
+    public GameObject playerPrefab;
+    public GameObject currentPlayer;
 
     public GameObject checkpointText;
 
     public int textDisplayTime = 3;
 
     public static TmpManagerInput Instance;
+
+    public CanonController[] canons;
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +34,8 @@ public class TmpManagerInput : MonoBehaviour
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.R)){
-            player.transform.position = checkpointPos.transform.position;
+            checkpointTP();
+            //player.transform.position = checkpointPos.transform.position;
         }
     }
 
@@ -45,5 +49,20 @@ public class TmpManagerInput : MonoBehaviour
       checkpointText.SetActive(true);
       yield return new WaitForSeconds(textDisplayTime);
       checkpointText.SetActive(false);
+    }
+
+    private void checkpointTP(){
+        //Destroy currentPlayer, create new with prefab and place it on correct position
+        Destroy(currentPlayer);
+        currentPlayer = Instantiate(playerPrefab, checkpointPos.transform);
+
+        /*
+        IMPORTANT
+        Désactiver les coroutines des canons
+        La tp peut casser le trigger des canons -> si tp, on stop les canons
+        */
+        foreach(CanonController canon in canons){
+          canon.DeactivateCoroutine();
+        }
     }
 }

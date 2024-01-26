@@ -66,4 +66,8 @@ public class CanonController : MonoBehaviour
             activateCoroutine = false;
         }
     }
+
+    public void DeactivateCoroutine(){
+        activateCoroutine = false;
+    }
 }
