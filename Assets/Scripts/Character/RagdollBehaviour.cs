@@ -14,7 +14,6 @@ public class RagdollBehaviour : GenericBehaviour
     private bool ragdollLocked = false;
     private int ragdollBool;                           // Animator variable related to ragdoll.
 
-    public bool GetRagdollOn => ragdollOn;
     public bool GetRagdollLocked => ragdollLocked;
 
     private void Start()
@@ -88,12 +87,15 @@ public class RagdollBehaviour : GenericBehaviour
 
     public void StartRagdollTimer()
     {
-        StartCoroutine(RagdollTimer());
+        if (!ragdollOn)
+        {
+            StartCoroutine(RagdollTimer());
+        }
     }
 
     public void StartRagdollTimerNLock()
     {
         ragdollLocked = true;
-        StartCoroutine(RagdollTimer());
+        StartRagdollTimer();
     }
 }
