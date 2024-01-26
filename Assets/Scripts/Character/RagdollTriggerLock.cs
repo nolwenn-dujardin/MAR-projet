@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class RagdollTrigger : MonoBehaviour
+public class RagdollTriggerLock : MonoBehaviour
 {
     private RagdollBehaviour ragdollBehaviour;
 
@@ -12,9 +12,9 @@ public class RagdollTrigger : MonoBehaviour
     // Permettre l'état ragdoll s'il n'est pas déjà actif
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.CompareTag("ObstacleDeath") || collider.CompareTag("Projectile"))
+        if (collider.CompareTag("Water"))
         {
-            ragdollBehaviour.StartRagdollTimer();
+            ragdollBehaviour.StartRagdollTimerNLock();
         }
     }
 }
