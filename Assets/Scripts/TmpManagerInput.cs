@@ -107,6 +107,7 @@ public class TmpManagerInput : MonoBehaviour
     }
 
     public void quit(){
+      Time.timeScale = 1;
       SceneManager.LoadScene("MainMenu");
     }
 }
