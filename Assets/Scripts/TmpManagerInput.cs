@@ -126,18 +126,28 @@ public class TmpManagerInput : MonoBehaviour
     private void onPause(){
         //Stop time, changer statut du jeu et afficher le menu
         pauseUI.SetActive(true);
-        playerCamControl.enabled = false;
+
+        if (playerCamControl != null)
+        {
+            playerCamControl.enabled = false;
+        }
+        
+        Cursor.visible = true;
         Time.timeScale = 0;
         gameIsPaused = true;
-        Cursor.visible = true;
     }
 
     public void onResume(){
         pauseUI.SetActive(false);
-        playerCamControl.enabled = true;
+
+        if (playerCamControl != null)
+        {
+            playerCamControl.enabled = true;
+        }
+        
         Time.timeScale = 1;
-        gameIsPaused = false;
         Cursor.visible = false;
+        gameIsPaused = false;
     }
 
     public void quit(){
