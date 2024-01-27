@@ -23,12 +23,18 @@ public class TmpManagerInput : MonoBehaviour
 
     public CanonController[] canons;
 
-    void Awake(){
-      if(Instance != null){
+    private ThirdPersonOrbitCamBasic playerCamControl;
+
+    void Awake()
+    {
+        if(Instance != null)
+        {
         Debug.LogWarning("Il y a plus d'une instance de TmpManagerInput dans la scène");
         return;
-      }
-      Instance = this;
+        }
+        Instance = this;
+
+        playerCamControl = currentPlayer.transform.Find("Main Camera").gameObject.GetComponent<ThirdPersonOrbitCamBasic>();
     }
 
     // Update is called once per frame
@@ -65,6 +71,7 @@ public class TmpManagerInput : MonoBehaviour
         //Destroy currentPlayer, create new with prefab and place it on correct position
         Destroy(currentPlayer);
         currentPlayer = Instantiate(playerPrefab, checkpointPos.transform);
+        playerCamControl = currentPlayer.transform.Find("Main Camera").gameObject.GetComponent<ThirdPersonOrbitCamBasic>();
 
         /*
         IMPORTANT
@@ -85,16 +92,18 @@ public class TmpManagerInput : MonoBehaviour
     }
 
     private void onPause(){
-      //Stop time, changer statut du jeu et afficher le menu
-      pauseUI.SetActive(true);
-      Time.timeScale = 0;
-      gameIsPaused = true;
+        //Stop time, changer statut du jeu et afficher le menu
+        pauseUI.SetActive(true);
+        playerCamControl.enabled = false;
+        Time.timeScale = 0;
+        gameIsPaused = true;
     }
 
     public void onResume(){
-      pauseUI.SetActive(false);
-      Time.timeScale = 1;
-      gameIsPaused = false;
+        pauseUI.SetActive(false);
+        playerCamControl.enabled = true;
+        Time.timeScale = 1;
+        gameIsPaused = false;
     }
 
     public void quit(){
