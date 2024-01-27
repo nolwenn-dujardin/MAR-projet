@@ -99,11 +99,6 @@ public class Success : LevelState
 
             // Orienter la cam�ra vers le personnage
             camera.transform.LookAt(lookTarget);
-
-            if (!ragdollBehaviour.GetRagdollLocked && animator.GetCurrentAnimatorStateInfo(0).IsName("End Succeed Animations"))
-            {
-                ragdollBehaviour.StartRagdollTimerNLock();
-            }
         }
     }
 

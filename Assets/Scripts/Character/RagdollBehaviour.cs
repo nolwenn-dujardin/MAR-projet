@@ -5,7 +5,7 @@ public class RagdollBehaviour : GenericBehaviour
 {
     public GameObject character;
     public GameObject hips;
-    public int ragdollDurationSeconds = 3;
+    public float ragdollDurationSeconds;
 
     private GameObject ragdollsStock;                    // Gameobject to stock only ragdolls
 
@@ -20,7 +20,7 @@ public class RagdollBehaviour : GenericBehaviour
 
     private void Start()
     {
-        ragdollsStock = GameObject.Find("Ragdolls");
+        ragdollsStock = GameObject.Find("RagdollsStock");
         charBody = GetComponent<Rigidbody>();
         colliders = GetComponents<Collider>();
         ragdollBool = Animator.StringToHash("Ragdoll");
@@ -111,7 +111,11 @@ public class RagdollBehaviour : GenericBehaviour
 
     public void StartRagdollTimerNLock()
     {
-        ragdollLocked = true;
-        StartRagdollTimer();
+        if (!ragdollLocked)
+        {
+            ragdollLocked = true;
+            StartCoroutine(RagdollTimer());
+        }
+        
     }
 }

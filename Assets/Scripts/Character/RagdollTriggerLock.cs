@@ -7,7 +7,7 @@ public class RagdollTriggerLock : MonoBehaviour
     // Permettre l'état ragdoll s'il n'est pas déjà actif
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.CompareTag("Water"))
+        if (ragdollBehaviour != null && collider.CompareTag("Water"))
         {
             ragdollBehaviour.StartRagdollTimerNLock();
         }
