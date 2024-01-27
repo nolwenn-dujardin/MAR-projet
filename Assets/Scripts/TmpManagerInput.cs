@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,7 +17,16 @@ public class TmpManagerInput : MonoBehaviour
 
     public bool gameIsPaused = false;
 
+    [SerializeField]
+    private bool gameEnded = false;
+
+    private bool isDead = false;
+
     public GameObject deathUI;
+
+    public GameObject endingUI;
+
+    public TextMeshProUGUI endingText;
 
     public int textDisplayTime = 3;
 
@@ -24,6 +35,13 @@ public class TmpManagerInput : MonoBehaviour
     public CanonController[] canons;
 
     private ThirdPersonOrbitCamBasic playerCamControl;
+
+    [SerializeField]
+    private int deathCount = 0;
+    [SerializeField]
+    private int tpCount = 0;
+
+    private float startTime;
 
     void Awake()
     {
@@ -37,6 +55,9 @@ public class TmpManagerInput : MonoBehaviour
         playerCamControl = currentPlayer.transform.Find("Main Camera").gameObject.GetComponent<ThirdPersonOrbitCamBasic>();
     }
 
+    private void Start() {
+      startTime = Time.time;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -49,9 +70,8 @@ public class TmpManagerInput : MonoBehaviour
           }
         }
 
-        if(Input.GetKeyDown(KeyCode.R) && !gameIsPaused){
+        if(Input.GetKeyDown(KeyCode.R) && !gameIsPaused && !gameEnded){
             checkpointTP();
-            //player.transform.position = checkpointPos.transform.position;
         }
     }
 
@@ -83,13 +103,21 @@ public class TmpManagerInput : MonoBehaviour
         }
 
         //Désactive affichage mort (cas où joueur respawn après avoir toucher l'eau)
-        deathUI.SetActive(false);
+        if(isDead){
+          deathUI.SetActive(false);
+          deathCount++;
+          isDead = false;
+        }
+        else {
+          tpCount++;
+        }
 
         AudioManager.Instance.PlaySFX("TeleportFX");
     }
 
     //Affichage du texte de mort
     public void onDeath(){
+      isDead = true;
       deathUI.SetActive(true);
     }
 
@@ -112,5 +140,18 @@ public class TmpManagerInput : MonoBehaviour
       Time.timeScale = 1;
       SceneManager.LoadScene("MainMenu");
       AudioManager.Instance.PlayMusic("WipeoutTheme");
+    }
+
+    public void endingScreen(){
+      float endTime = Time.time;
+      float duration = endTime - startTime;
+      string durationString = TimeSpan.FromSeconds(duration).ToString(@"mm\mss\s");
+
+      string endTxt = $"Vous avez bu la tasse {deathCount} fois,\n"+
+      $"et êtes revenus au checkpoint {tpCount} fois,\n"+
+      $"le tout en {durationString}";
+      endingUI.SetActive(true);
+      endingText.SetText(endTxt);
+      gameEnded = true;
     }
 }

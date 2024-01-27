@@ -57,6 +57,7 @@ public class Success : LevelState
             audioSource.Play();*/
 
             AudioManager.Instance.PlayMusic("Success"+Random.Range(1,2));
+            TmpManagerInput.Instance.endingScreen();
 
             // Create points for camera movement
             Vector3 center = transform.position;
