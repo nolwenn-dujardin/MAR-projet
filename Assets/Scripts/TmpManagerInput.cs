@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TmpManagerInput : MonoBehaviour
 {
@@ -10,30 +11,39 @@ public class TmpManagerInput : MonoBehaviour
 
     public GameObject checkpointText;
 
+    public GameObject pauseUI;
+
+    public bool gameIsPaused = false;
+
+    public GameObject deathUI;
+
     public int textDisplayTime = 3;
 
     public static TmpManagerInput Instance;
 
     public CanonController[] canons;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-      if(Instance != null && Instance != this){
-        Destroy(this.gameObject);
+    void Awake(){
+      if(Instance != null){
+        Debug.LogWarning("Il y a plus d'une instance de TmpManagerInput dans la scène");
         return;
       }
-      else {
-        Instance = this;
-      }
-
-      DontDestroyOnLoad(this.gameObject);
+      Instance = this;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.R)){
+        if(Input.GetKeyDown(KeyCode.Escape)){
+          if(gameIsPaused){
+            onResume();
+          }
+          else {
+            onPause();
+          }
+        }
+
+        if(Input.GetKeyDown(KeyCode.R) && !gameIsPaused){
             checkpointTP();
             //player.transform.position = checkpointPos.transform.position;
         }
@@ -64,5 +74,30 @@ public class TmpManagerInput : MonoBehaviour
         foreach(CanonController canon in canons){
           canon.DeactivateCoroutine();
         }
+
+        //Désactive affichage mort (cas où joueur respawn après avoir toucher l'eau)
+        deathUI.SetActive(false);
+    }
+
+    //Affichage du texte de mort
+    public void onDeath(){
+      deathUI.SetActive(true);
+    }
+
+    private void onPause(){
+      //Stop time, changer statut du jeu et afficher le menu
+      pauseUI.SetActive(true);
+      Time.timeScale = 0;
+      gameIsPaused = true;
+    }
+
+    public void onResume(){
+      pauseUI.SetActive(false);
+      Time.timeScale = 1;
+      gameIsPaused = false;
+    }
+
+    public void quit(){
+      SceneManager.LoadScene("MainMenu");
     }
 }
