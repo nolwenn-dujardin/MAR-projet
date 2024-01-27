@@ -11,6 +11,7 @@ public class RagdollTriggerLock : MonoBehaviour
         {
             //Contact avec de l'eau -> activer affichage mort
             TmpManagerInput.Instance.onDeath();
+            AudioManager.Instance.PlaySFX("Water"+Random.Range(1,2));
 
 
             ragdollBehaviour.StartRagdollTimerNLock();

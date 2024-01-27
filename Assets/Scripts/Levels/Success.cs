@@ -52,9 +52,11 @@ public class Success : LevelState
             animator.Play("Chicken Dance");
 
             // Set succeed music
-            AudioSource audioSource = GetComponentInChildren<AudioSource>();
+            /*AudioSource audioSource = GetComponentInChildren<AudioSource>();
             audioSource.clip = succeedMusics[new System.Random().Next(0, succeedMusics.Count)];
-            audioSource.Play();
+            audioSource.Play();*/
+
+            AudioManager.Instance.PlayMusic("Success"+Random.Range(1,2));
 
             // Create points for camera movement
             Vector3 center = transform.position;
