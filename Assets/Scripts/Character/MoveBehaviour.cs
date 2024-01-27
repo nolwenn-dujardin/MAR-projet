@@ -62,6 +62,9 @@ public class MoveBehaviour : GenericBehaviour
         // Start a new jump.
         if (jump && !behaviourManager.GetAnim.GetBool(jumpBool) && behaviourManager.IsGrounded() && !behaviourManager.GetAnim.GetBool(ragdollBool))
 		{
+			//Jump sound effect
+			AudioManager.Instance.PlaySFX("JumpFX");		
+
 			// Set jump related parameters.
 			behaviourManager.LockTempBehaviour(this.behaviourCode);
 			behaviourManager.GetAnim.SetBool(jumpBool, true);

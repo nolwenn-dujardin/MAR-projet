@@ -84,6 +84,8 @@ public class TmpManagerInput : MonoBehaviour
 
         //Désactive affichage mort (cas où joueur respawn après avoir toucher l'eau)
         deathUI.SetActive(false);
+
+        AudioManager.Instance.PlaySFX("TeleportFX");
     }
 
     //Affichage du texte de mort
@@ -109,5 +111,6 @@ public class TmpManagerInput : MonoBehaviour
     public void quit(){
       Time.timeScale = 1;
       SceneManager.LoadScene("MainMenu");
+      AudioManager.Instance.PlayMusic("WipeoutTheme");
     }
 }

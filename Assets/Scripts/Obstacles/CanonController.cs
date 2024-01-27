@@ -46,7 +46,8 @@ public class CanonController : MonoBehaviour
         GameObject newBullet = Instantiate(Bullet, firePosition.position, Quaternion.identity);
         newBullet.GetComponent<Rigidbody>().AddForce(canon.forward * ShootSpeed, ForceMode.Impulse);
 
-        soundEffect.PlayOneShot(soundEffect.clip,0.5f);
+        //soundEffect.PlayOneShot(soundEffect.clip,0.5f);
+        AudioManager.Instance.PlaySFX("CannonFX");
     }
 
     private void OnTriggerEnter(Collider other)
