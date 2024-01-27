@@ -57,7 +57,9 @@ public class TmpManagerInput : MonoBehaviour
 
     private void Start() {
       startTime = Time.time;
+      Cursor.visible = false;
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -127,6 +129,7 @@ public class TmpManagerInput : MonoBehaviour
         playerCamControl.enabled = false;
         Time.timeScale = 0;
         gameIsPaused = true;
+        Cursor.visible = true;
     }
 
     public void onResume(){
@@ -134,6 +137,7 @@ public class TmpManagerInput : MonoBehaviour
         playerCamControl.enabled = true;
         Time.timeScale = 1;
         gameIsPaused = false;
+        Cursor.visible = false;
     }
 
     public void quit(){
