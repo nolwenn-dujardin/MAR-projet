@@ -1,6 +1,6 @@
 # Totally Not Total Wipeout
 
-Totally Not Total Wipeout est un jeu de plateforme 3D, inspiré de l'émission Total Wipeout, réalisé dans le cadre de l'UE MAR, dans lequel vous devrez terminé un parcours le plus rapidement possible.
+Totally Not Total Wipeout est un jeu de plateforme 3D, inspiré de l'émission Total Wipeout, réalisé dans le cadre de l'UE MAR, dans lequel vous devrez terminer un parcours le plus rapidement possible.
 
 ## Réalisé par
 
